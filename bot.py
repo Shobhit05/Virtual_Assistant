@@ -5,6 +5,8 @@ import datetime
 import speech_recognition as sr
 import wikipedia
 from calculator import calcy
+import Tkinter as tk
+import tkMessageBox
 import selenium
 from selenium import *
 from selenium import webdriver
@@ -13,6 +15,8 @@ import selenium.webdriver.support.ui as ui
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+
+
 
 
 def login_facebook():
@@ -53,20 +57,16 @@ def string_work(res):
     
 
 def wikipedia_search(data):
-    print data
+    print "You said"+data
     data=data.split(" ")[2:]
     b=""
     for i in data:
         b=b+i+" "
-    print b
     res=wikipedia.summary(str(b),sentences=1)
     ans=string_work(res)
-    print ans
-    tts=gTTS(text=ans,lang='en')
-    tts.save("res.mp3")
-    os.system("mpg321 res.mp3")
-    os.remove("res.mp3")
-
+    root = tk.Tk()
+    tkMessageBox.showinfo(message=ans)
+    root.destroy()
 
 
 def work_tobe_done(data):
@@ -83,7 +83,7 @@ def work_tobe_done(data):
         if not os.path.isfile("func_do.mp3"):
             function="Great to hear.Ok So how may I help You?"
             tts=gTTS(text=function,lang='en')
-            tts.save("func_do.mp3")
+            tts.save("help.mp3")
         os.system("mpg321 func_do.mp3")
         aud_input()
         
@@ -104,21 +104,19 @@ def time():
     ctime=a.split(" ")
     ctime=int(ctime[1][:2])
 
-    
     if ctime>16 and ctime<21:
         message="Good Evening There"
         tts = gTTS(text=message, lang='en')
         tts.save("good.mp3")
         os.system("mpg321 good.mp3")
         
-    elif ctime>12 and ctime<16:
+    elif ctime>=12 and ctime<16:
         
-        message="Good Afternoon Shobhit There"
+        message="Good Afternoon There"
         tts = gTTS(text=message, lang='en')
         tts.save("good.mp3")
         os.system("mpg321 good.mp3")
     else:
-        
         message="Good Morning There"
         tts = gTTS(text=message, lang='en')
         tts.save("good.mp3")
