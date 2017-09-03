@@ -4,6 +4,7 @@ from time import  gmtime, strftime
 import datetime
 import speech_recognition as sr
 import wikipedia
+from calculator import calcy
 import selenium
 from selenium import *
 from selenium import webdriver
@@ -35,15 +36,41 @@ def aud_input():
     with sr.Microphone(6) as source:
         r.adjust_for_ambient_noise(source,1)
         print("Say something!")
-        audio = r.listen(source,2,2)
+        audio = r.listen(source,1,3)
     try:
         data=r.recognize_google(audio)
         work_tobe_done(data)
-    except:
-        print("Say Help me Py to continue")
+    except Exception as e:
+        print e
+
+
+def string_work(res):
+    start=res.find("(")
+    end=res.find(")")
+    ans=res[:start-2]+res[end+1:]
+    return ans
+    
+    
+
+def wikipedia_search(data):
+    print data
+    data=data.split(" ")[2:]
+    b=""
+    for i in data:
+        b=b+i+" "
+    print b
+    res=wikipedia.summary(str(b),sentences=1)
+    ans=string_work(res)
+    print ans
+    tts=gTTS(text=ans,lang='en')
+    tts.save("res.mp3")
+    os.system("mpg321 res.mp3")
+    os.remove("res.mp3")
+
 
 
 def work_tobe_done(data):
+    
     if "how are you" in str(data).lower():
         if not os.path.isfile("greet.mp3"):
             greet="I am fine? What about You"
@@ -51,29 +78,26 @@ def work_tobe_done(data):
             tts.save("greet.mp3")
         os.system("mpg321 greet.mp3")
         aud_input()
+        
     elif "i am fine" in str(data).lower():
         if not os.path.isfile("func_do.mp3"):
             function="Great to hear.Ok So how may I help You?"
             tts=gTTS(text=function,lang='en')
             tts.save("func_do.mp3")
         os.system("mpg321 func_do.mp3")
+        aud_input()
         
     elif "who" in str(data).lower() or "what" in str(data).lower():
-        data=data.split(" ")[2:]
-        b=""
-        for i in data:
-            b=b+i+" "
-        res=wikipedia.summary(str(b),sentences=1)
-        start=res.find("(")
-        end=res.find(")")
-        ans=res[:start-2]+res[end+1:]
-        tts=gTTS(text=ans,lang='en')
+        wikipedia_search(data)
+
+    elif "calculate" in data:
+        res=calcy(data)
+        res="The answer is %s"%(res)
+        tts = gTTS(text=res, lang='en')
         tts.save("res.mp3")
         os.system("mpg321 res.mp3")
         os.remove("res.mp3")
-                
-    #login_facebook()
-    
+        
 
 def time():
     a = str(datetime.datetime.now())
