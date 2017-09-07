@@ -99,13 +99,12 @@ def work_tobe_done(data):
     elif "time" in data:
         a = str(datetime.datetime.now())
         ctime=a.split(" ")
-        ctime=int(ctime[1][:2])
+        ctime=ctime[1]
         tts=gTTS(text=ctime,lang='en')
         tts.save("time.mp3")
         os.system("mpg321 time.mp3")
     else:
         wikipedia_search(data)
-        
 
 def time():
     a = str(datetime.datetime.now())
