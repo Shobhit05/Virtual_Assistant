@@ -7,6 +7,7 @@ import wikipedia
 from calculator import calcy
 import Tkinter as tk
 import tkMessageBox
+from nltk.tag import pos_tag
 import selenium
 from selenium import *
 from selenium import webdriver
@@ -57,12 +58,12 @@ def string_work(res):
     
 
 def wikipedia_search(data):
-    print "You said"+data
-    data=data.split(" ")[2:]
-    b=""
-    for i in data:
-        b=b+i+" "
-    res=wikipedia.summary(str(b),sentences=1)
+    print "You said "+data
+    sentence=data
+    tagged_sent = pos_tag(sentence.split())
+    propernouns = [word for word,pos in tagged_sent if pos == 'NNP']
+    a=propernouns[0]+" "+propernouns[1]
+    res=wikipedia.summary(str(a),sentences=1)
     ans=string_work(res)
     root = tk.Tk()
     tkMessageBox.showinfo(message=ans)
@@ -85,9 +86,7 @@ def work_tobe_done(data):
             tts.save("help.mp3")
         os.system("mpg321 func_do.mp3")
         aud_input()
-        
-    elif "who" in str(data).lower() or "what" in str(data).lower():
-        wikipedia_search(data)
+    
 
     elif "calculate" in data:
         res=calcy(data)
@@ -96,35 +95,46 @@ def work_tobe_done(data):
         tts.save("res.mp3")
         os.system("mpg321 res.mp3")
         os.remove("res.mp3")
+
+    elif "time" in data:
+        a = str(datetime.datetime.now())
+        ctime=a.split(" ")
+        ctime=int(ctime[1][:2])
+        tts=gTTS(text=ctime,lang='en')
+        tts.save("time.mp3")
+        os.system("mpg321 time.mp3")
+    else:
+        wikipedia_search(data)
         
 
 def time():
     a = str(datetime.datetime.now())
     ctime=a.split(" ")
     ctime=int(ctime[1][:2])
+    
 
     if ctime>16 and ctime<21:
-        if os.path.isfile("good.mp3"):
+        if not os.path.isfile("goodeve.mp3"):
             message="Good Evening There"
             tts = gTTS(text=message, lang='en')
-            tts.save("good.mp3")
-            os.system("mpg321 good.mp3")
+            tts.save("goodeve.mp3")
+        os.system("mpg321 goodeve.mp3")
         
     elif ctime>=12 and ctime<16:
-        if os.path.isfile("good.mp3"):
+        if not os.path.isfile("goodaft.mp3"):
             message="Good Afternoon There"
             tts = gTTS(text=message, lang='en')
-            tts.save("good.mp3")
-            os.system("mpg321 good.mp3")
+            tts.save("goodaft.mp3")
+        os.system("mpg321 goodaft.mp3")
     else:
-        if os.path.isfile("good.mp3"):
+        if not os.path.isfile("goodmor.mp3"):
             message="Good Morning There"
             tts = gTTS(text=message, lang='en')
-            tts.save("good.mp3")
-            os.system("mpg321 good.mp3")
+            tts.save("goodmor.mp3")
+        os.system("mpg321 goodmor.mp3")
         
-    aud_input()
 
-
+time()
 while True:
-    time()
+    aud_input()
+    
