@@ -8,6 +8,7 @@ from calculator import calcy
 import Tkinter as tk
 import tkMessageBox
 from nltk.tag import pos_tag
+
 import selenium
 from selenium import *
 from selenium import webdriver
@@ -35,13 +36,32 @@ def login_facebook():
         return("Something Goes Wrong")
 
 
+def music(data):
+    import time
+    driver=webdriver.Chrome()
+    driver.get("https://youtube.com")
+    name=WebDriverWait(driver,20).until(EC.presence_of_element_located((By.XPATH, "//*[@id='search']")))
+    name.send_keys(data[5:])
+    driver.find_element_by_xpath("//*[@id='search-icon-legacy']").click()
+    time.sleep(5)
+    div=driver.find_elements_by_xpath("//*[@id='video-title']")
+    ans=[]
+    for i in div:
+        ans.append(str((i.get_attribute("href"))))
+    try:
+        ind=ans.index('None')
+        driver.get(str(ans[ind+1]))
+    except:
+        driver.get(str(ans[0]))
+        
+            
 
 def aud_input():
     r = sr.Recognizer()
     with sr.Microphone(6) as source:
         r.adjust_for_ambient_noise(source,1)
         print("Say something!")
-        audio = r.listen(source,1,3)
+        audio = r.listen(source,1,2)
     try:
         data=r.recognize_google(audio)
         work_tobe_done(data)
@@ -86,8 +106,10 @@ def work_tobe_done(data):
             tts.save("help.mp3")
         os.system("mpg321 func_do.mp3")
         aud_input()
-    
-
+        
+    elif "play" in str(data).lower():
+        music(data)
+        
     elif "calculate" in data:
         res=calcy(data)
         res="The answer is %s"%(res)
@@ -133,7 +155,7 @@ def time():
         os.system("mpg321 goodmor.mp3")
         
 
-time()
-while True:
-    aud_input()
+##time()
+
+aud_input()
     
