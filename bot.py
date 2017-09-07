@@ -70,7 +70,6 @@ def wikipedia_search(data):
 
 
 def work_tobe_done(data):
-    
     if "how are you" in str(data).lower():
         if not os.path.isfile("greet.mp3"):
             greet="I am fine? What about You"
@@ -105,30 +104,27 @@ def time():
     ctime=int(ctime[1][:2])
 
     if ctime>16 and ctime<21:
-        message="Good Evening There"
-        tts = gTTS(text=message, lang='en')
-        tts.save("good.mp3")
-        os.system("mpg321 good.mp3")
+        if os.path.isfile("good.mp3"):
+            message="Good Evening There"
+            tts = gTTS(text=message, lang='en')
+            tts.save("good.mp3")
+            os.system("mpg321 good.mp3")
         
     elif ctime>=12 and ctime<16:
-        
-        message="Good Afternoon There"
-        tts = gTTS(text=message, lang='en')
-        tts.save("good.mp3")
-        os.system("mpg321 good.mp3")
+        if os.path.isfile("good.mp3"):
+            message="Good Afternoon There"
+            tts = gTTS(text=message, lang='en')
+            tts.save("good.mp3")
+            os.system("mpg321 good.mp3")
     else:
-        message="Good Morning There"
-        tts = gTTS(text=message, lang='en')
-        tts.save("good.mp3")
-        os.system("mpg321 good.mp3")
+        if os.path.isfile("good.mp3"):
+            message="Good Morning There"
+            tts = gTTS(text=message, lang='en')
+            tts.save("good.mp3")
+            os.system("mpg321 good.mp3")
         
     aud_input()
 
-##    if not os.path.isfile("function.mp3"):
-##        functions="The functions I can do right now are: I can open the music player.Second I can open the web browser.Now what can I do for you?"
-##        tts = gTTS(text=functions, lang='en')
-##        tts.save("function.mp3")
-##    os.system("mpg321 function.mp3")
-    
-        
-time()
+
+while True:
+    time()
