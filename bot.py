@@ -8,11 +8,11 @@ from calculator import calcy
 import Tkinter as tk
 import tkMessageBox
 from nltk.tag import pos_tag
-
 import selenium
 from selenium import *
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
+
 import selenium.webdriver.support.ui as ui
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
@@ -21,19 +21,19 @@ from selenium.webdriver.common.by import By
 
 
 
-def login_facebook():
-    try:
-        driver=webdriver.Chrome()
-        driver.get("https://facebook.com")
-
-        username=WebDriverWait(driver,20).until(EC.presence_of_element_located((By.XPATH, "//*[@id='email']")))
-        password = driver.find_element_by_xpath("//*[@id='pass']")
-
-        username.send_keys("shobhit.srivastava39@gmail.com")
-        password.send_keys("####")
-        driver.find_element_by_xpath("//*[@id='u_0_2']").click()
-    except:
-        return("Something Goes Wrong")
+##def login_facebook():
+##    try:
+##        driver=webdriver.Chrome()
+##        driver.get("https://facebook.com")
+##
+##        username=WebDriverWait(driver,20).until(EC.presence_of_element_located((By.XPATH, "//*[@id='email']")))
+##        password = driver.find_element_by_xpath("//*[@id='pass']")
+##
+##        username.send_keys("shobhit.srivastava39@gmail.com")
+##        password.send_keys("####")
+##        driver.find_element_by_xpath("//*[@id='u_0_2']").click()
+##    except:
+##        return("Something Goes Wrong")
 
 
 def music(data):
@@ -155,7 +155,7 @@ def time():
         os.system("mpg321 goodmor.mp3")
         
 
-##time()
+#time()
 
 aud_input()
     
